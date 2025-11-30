@@ -3,42 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>적하수오 가치 분석 보고서</title>
+    <title>적하수오 통합 관리 리포트</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* 기본 스타일 설정: 눈이 편안한 색상과 큰 글씨 */
+        /* [통합 스타일 시트] */
         :root {
-            --primary-color: #2c3e50; /* 진한 남색 */
-            --accent-color: #c0392b;  /* 강조용 붉은색 */
-            --bg-color: #f4f6f8;      /* 배경 회색 */
-            --paper-color: #ffffff;   /* 종이 흰색 */
-            --text-color: #333333;    /* 기본 검정 */
-            --link-color: #2980b9;    /* 링크 파란색 */
+            --primary-color: #2c3e50; /* 공통 진한 남색 */
+            --accent-red: #c0392b;    /* 보고서용 강조 */
+            --accent-green: #27ae60;  /* 현황판용 완료/강조 */
+            --bg-color: #f4f6f8;      /* 배경 */
+            --paper-color: #ffffff;   /* 종이 질감 */
+            --text-color: #333333;
+            --pending-color: #f39c12;
         }
 
         body {
             font-family: 'Noto Sans KR', sans-serif;
-            line-height: 1.8; /* 줄 간격 넓게 */
-            font-size: 18px;  /* 기본 글자 크기 확대 (어르신 맞춤) */
+            line-height: 1.6;
+            font-size: 17px;
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
             padding: 20px;
         }
 
-        /* 문서를 종이처럼 보이게 하는 컨테이너 */
+        /* 컨테이너: 문서를 종이처럼 표현 */
         .container {
-            max-width: 800px;
-            margin: 0 auto;
+            max-width: 900px;
+            margin: 0 auto 50px auto; /* 아래쪽 여백 추가 */
             background-color: var(--paper-color);
             padding: 40px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             border-radius: 10px;
         }
 
-        /* 제목 스타일 */
+        /* 인쇄 시 페이지 나눔 설정 */
+        @media print {
+            body { background-color: white; }
+            .container { box-shadow: none; border: none; margin: 0; padding: 0; max-width: 100%; }
+            .btn-area { display: none; } /* 인쇄 버튼 숨김 */
+            .page-break { page-break-before: always; } /* 강제 페이지 넘김 */
+        }
+
+        /* --- 공통 타이포그래피 --- */
         h1 {
             font-size: 28px;
             color: var(--primary-color);
@@ -47,16 +56,14 @@
             margin-top: 0;
             text-align: center;
         }
-
         h2 {
-            font-size: 24px;
+            font-size: 22px;
             color: var(--primary-color);
             background-color: #eaf2f8;
             padding: 10px 15px;
             border-left: 5px solid var(--primary-color);
             margin-top: 40px;
         }
-
         h3 {
             font-size: 20px;
             color: #555;
@@ -65,120 +72,116 @@
             padding-bottom: 5px;
         }
 
-        /* 핵심 요약 박스 */
+        /* --- 보고서(Report) 전용 스타일 --- */
         .executive-summary {
-            background-color: #fff8e1; /* 연한 노랑 */
+            background-color: #fff8e1;
             border: 2px solid #ffecb3;
             padding: 20px;
             border-radius: 8px;
             margin-bottom: 30px;
         }
-
-        /* 테이블 스타일 */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            font-size: 17px;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: center;
-        }
-
-        th {
-            background-color: var(--primary-color);
-            color: white;
-            font-weight: bold;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        /* 강조 텍스트 */
-        .highlight {
-            color: var(--accent-color);
-            font-weight: bold;
-        }
-
-        .price-tag {
-            font-size: 22px;
-            font-weight: bold;
-            color: #d32f2f;
-        }
-
-        /* 단계별 프로세스 디자인 */
+        .highlight { color: var(--accent-red); font-weight: bold; }
+        .price-tag { font-size: 22px; font-weight: bold; color: #d32f2f; }
+        
         .step-box {
             background-color: #f0f4f8;
             border-left: 4px solid #3498db;
             padding: 15px;
             margin: 10px 0;
         }
-        
-        .step-number {
+        .step-number { font-weight: bold; color: #3498db; margin-right: 10px; }
+
+        /* --- 현황판(Dashboard) 전용 스타일 --- */
+        .progress-container {
+            background-color: #e0e0e0;
+            border-radius: 25px;
+            margin: 20px 0;
+            height: 30px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            background-color: var(--accent-green);
+            height: 100%;
+            width: 15%;
+            text-align: center;
+            line-height: 30px;
+            color: white;
             font-weight: bold;
-            color: #3498db;
-            margin-right: 10px;
+            transition: width 0.5s;
         }
 
-        /* 버튼 스타일 */
+        .phase-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #fff;
+        }
+        .phase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .phase-title { font-size: 1.1em; font-weight: bold; color: var(--primary-color); }
+        
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: white;
+        }
+        .status-done { background-color: var(--accent-green); }
+        .status-progress { background-color: #3498db; }
+        .status-pending { background-color: #95a5a6; }
+
+        .checklist-item { margin: 8px 0; display: flex; align-items: center; }
+        .checklist-item input { transform: scale(1.3); margin-right: 10px; }
+        .done-text { text-decoration: line-through; color: #888; }
+
+        /* 간트 차트 */
+        .gantt-table th { font-size: 0.8em; }
+        .gantt-bar { background-color: #3498db; height: 20px; border-radius: 4px; }
+        .gantt-done { background-color: var(--accent-green); opacity: 0.8; }
+
+        /* --- 테이블 공통 --- */
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 16px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+        th { background-color: var(--primary-color); color: white; font-weight: bold; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+
+        /* --- 버튼 --- */
+        .btn-area { text-align: center; margin-bottom: 20px; }
         .btn {
             display: inline-block;
-            padding: 12px 24px;
+            padding: 12px 30px;
             background-color: var(--primary-color);
             color: white;
             text-decoration: none;
             border-radius: 5px;
             font-weight: bold;
-            text-align: center;
-            transition: background 0.3s;
             cursor: pointer;
             border: none;
             font-size: 18px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-
-        .btn:hover {
-            background-color: #1a252f;
-        }
-
-        .btn-full {
-            width: 100%;
-            box-sizing: border-box;
-            margin-bottom: 20px;
-        }
-
-        .btn-detail {
-            background-color: #27ae60; /* 초록색 */
-            width: 100%;
-            box-sizing: border-box;
-            margin-top: 15px;
-        }
+        .btn:hover { background-color: #1a252f; }
         
-        .btn-detail:hover {
-            background-color: #219150;
-        }
-
-        /* 모바일 최적화 */
+        /* 모바일 대응 */
         @media (max-width: 600px) {
-            .container {
-                padding: 20px;
-            }
-            body {
-                padding: 10px;
-                font-size: 16px;
-            }
+            .container { padding: 20px; }
             h1 { font-size: 24px; }
-            h2 { font-size: 20px; }
-            th, td { padding: 8px; font-size: 15px; }
+            .phase-header { flex-direction: column; align-items: flex-start; }
+            .status-badge { margin-top: 5px; }
         }
     </style>
 </head>
 <body>
 
-    <button class="btn btn-full" onclick="window.print()">🖨️ 이 보고서 인쇄하기 / PDF 저장</button>
+    <div class="btn-area">
+        <button class="btn" onclick="window.print()">🖨️ 전체 리포트 인쇄 / PDF 저장</button>
+    </div>
 
     <div class="container">
         <h1>특급 희귀 자연산 적하수오<br><small style="font-size:0.6em; color:#666;">기록 등재 및 가격 극대화 전략 보고서</small></h1>
@@ -228,8 +231,6 @@
             약 50~80만원 소요 / 약 6~8주 걸림
         </div>
 
-        <a href="progress_dashboard.html" class="btn btn-detail">📊 현황 및 작업 진행도 확인하기</a>
-
         <h2>2. 기네스 월드레코드 도전 (국제)</h2>
         <p>전 세계 기록인 기네스북은 심사가 까다롭지만, 성공 시 가치가 폭등합니다. 현재 <strong>'적하수오(Fallopia multiflora)' 카테고리</strong>에 등록된 기록이 없어 새로운 1등이 될 기회입니다.</p>
         
@@ -268,7 +269,7 @@
             </tbody>
         </table>
 
-        <h2>4. 향후 실행 계획 (지금 하셔야 할 일)</h2>
+        <h2>4. 향후 실행 계획 (Action Plan)</h2>
         
         <div class="step-box">
             <span class="step-number">STEP 1. 지금 즉시</span>
@@ -288,7 +289,7 @@
             소문이 충분히 난 뒤, 경매를 통해 가장 비싸게 부르는 사람에게 판매합니다.
         </div>
 
-        <hr>
+        <hr style="margin: 30px 0;">
         
         <h3>💡 주의사항</h3>
         <ul>
@@ -296,8 +297,167 @@
             <li>판매 전까지는 <strong>절대 헐값에 넘기지 마시고</strong> 버티셔야 합니다.</li>
         </ul>
 
+        <div style="text-align: center; margin-top: 30px; color: #888; font-size: 14px;">
+            1부 끝 (계속해서 현황판이 이어집니다)
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <div class="container">
+        <h1>📊 적하수오 프로젝트 현황판</h1>
+        <p style="text-align: right; color: #666;">기준일: 2025년 11월 30일 | 진행: 1주차</p>
+
+        <h3>전체 진행률 (약 15%)</h3>
+        <div class="progress-container">
+            <div class="progress-bar" style="width: 15%;">15%</div>
+        </div>
+
+        <div style="background-color: #e8f8f5; border: 1px solid #2ecc71; padding: 15px; border-radius: 8px; margin-bottom: 30px;">
+            <strong>🔔 현재 상태 요약</strong><br>
+            한국기록원(KRI)에 신청서 제출 및 비용 결제가 <strong>완료</strong>되었습니다. <br>
+            현재 심사관 배정 및 1차 결과를 기다리고 있습니다. (예상: 12/4~12/5)
+        </div>
+
+        <h2>1. 단계별 진행 상세 (Phase 1 ~ 4)</h2>
+
+        <div class="phase-card" style="border-left: 5px solid var(--accent-green);">
+            <div class="phase-header">
+                <span class="phase-title">Phase 1: KRI 기록 도전 가능성 확인</span>
+                <span class="status-badge status-progress">진행 중 (In Progress)</span>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" checked disabled> <span class="done-text">신청서 작성 및 제출 (2025-11-30)</span>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" checked disabled> <span class="done-text">심사비용 결제 (99,000원, 기업은행)</span>
+            </div>
+            <div class="checklist-item">
+                <input type="checkbox" disabled> <span>KRI 1차 심사 결과 메일 수령 (대기 중)</span>
+            </div>
+        </div>
+
+        <div class="phase-card">
+            <div class="phase-header">
+                <span class="phase-title">Phase 2: 과학적 증거 수집 (12월 중순~)</span>
+                <span class="status-badge status-pending">예정 (Pending)</span>
+            </div>
+            <ul>
+                <li><strong>한국임업진흥원:</strong> 잔류농약 검사 (자연산 증명)</li>
+                <li><strong>대학 교수 소견서:</strong> 목질화 분석 (수령 80~100년 추정 증명)</li>
+                <li><strong>비용 준비:</strong> 약 300~500만원 예상</li>
+            </ul>
+        </div>
+
+        <div class="phase-card">
+            <div class="phase-header">
+                <span class="phase-title">Phase 3: 공식 검증 및 인증 (1월 말~)</span>
+                <span class="status-badge status-pending">예정 (Pending)</span>
+            </div>
+            <ul>
+                <li>KRI 심판관 현장 방문 및 실측 (2.8m / 2.5kg 재확인)</li>
+                <li>최종 심사 후 <strong>공식 인증서 수령</strong></li>
+            </ul>
+        </div>
+
+        <h2>2. 주간 일정표 (Schedule)</h2>
+        <table class="gantt-table">
+            <thead>
+                <tr>
+                    <th width="20%">구분</th>
+                    <th>11/30</th>
+                    <th>12월</th>
+                    <th>1월</th>
+                    <th>2월</th>
+                    <th>3월</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Phase 1</strong><br>신청/접수</td>
+                    <td><div class="gantt-bar gantt-done" style="width:100%"></div></td>
+                    <td><div class="gantt-bar" style="width:30%"></div></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><strong>Phase 2</strong><br>성분/감정</td>
+                    <td></td>
+                    <td><div class="gantt-bar" style="width:100%; background-color:#ddd;"></div></td>
+                    <td><div class="gantt-bar" style="width:40%; background-color:#ddd;"></div></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><strong>Phase 3</strong><br>현장검증</td>
+                    <td></td>
+                    <td></td>
+                    <td><div class="gantt-bar" style="width:100%; background-color:#ddd;"></div></td>
+                    <td><div class="gantt-bar" style="width:30%; background-color:#ddd;"></div></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><strong>Phase 4</strong><br>홍보/판매</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><div class="gantt-bar" style="width:100%; background-color:#ddd;"></div></td>
+                    <td><div class="gantt-bar" style="width:50%; background-color:#ddd;"></div></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>3. 예상 소요 비용 (Budget)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>항목</th>
+                    <th>금액 (예상)</th>
+                    <th>비고</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="background-color: #e8f8f5;">
+                    <td><strong>KRI 접수비 (완료)</strong></td>
+                    <td><strong>99,000원</strong></td>
+                    <td>결제 완료</td>
+                </tr>
+                <tr>
+                    <td>임업진흥원 검사</td>
+                    <td>약 35~40만원</td>
+                    <td>자연산 증명</td>
+                </tr>
+                <tr>
+                    <td>교수 자문료</td>
+                    <td>50~100만원</td>
+                    <td>수령 감정</td>
+                </tr>
+                <tr>
+                    <td>KRI 심판관 출장/심의</td>
+                    <td>220~330만원</td>
+                    <td>추후 견적 확정</td>
+                </tr>
+                <tr>
+                    <td style="color:red; font-weight:bold;">총 합계</td>
+                    <td colspan="2" style="color:red; font-weight:bold;">약 350 ~ 500만원 예상</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>✅ 최종 체크리스트 (To-Do)</h2>
+        <div style="background-color: #fff; padding: 20px; border: 1px solid #ddd;">
+            <div class="checklist-item"><input type="checkbox" checked disabled> <span class="done-text">1. KRI 신청서 제출</span></div>
+            <div class="checklist-item"><input type="checkbox" checked disabled> <span class="done-text">2. 신청 비용 결제</span></div>
+            <div class="checklist-item"><input type="checkbox"> 3. KRI 담당자 메일 확인 (12/4~5 예정)</div>
+            <div class="checklist-item"><input type="checkbox"> 4. 임업진흥원(1600-3248) 검사 의뢰</div>
+            <div class="checklist-item"><input type="checkbox"> 5. 대학 교수님 섭외 및 소견서 요청</div>
+            <div class="checklist-item"><input type="checkbox"> 6. KRI 현장 검증 일정 확정</div>
+            <div class="checklist-item"><input type="checkbox"> 7. 언론 보도자료 배포</div>
+        </div>
+
         <div style="text-align: center; margin-top: 50px; color: #888; font-size: 14px;">
-            분석일: 2025년 11월 30일 | AI 자문 시스템 제공
+            분석 및 관리: 2025년 11월 30일 | AI 자문 시스템
         </div>
     </div>
 
