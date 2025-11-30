@@ -15,6 +15,7 @@
             --bg-color: #f4f6f8;      /* 배경 회색 */
             --paper-color: #ffffff;   /* 종이 흰색 */
             --text-color: #333333;    /* 기본 검정 */
+            --link-color: #2980b9;    /* 링크 파란색 */
         }
 
         body {
@@ -123,24 +124,41 @@
             margin-right: 10px;
         }
 
-        /* 인쇄 버튼 */
-        .print-btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
+        /* 버튼 스타일 */
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
             background-color: var(--primary-color);
             color: white;
-            text-align: center;
-            font-size: 20px;
+            text-decoration: none;
+            border-radius: 5px;
             font-weight: bold;
-            border: none;
-            border-radius: 8px;
+            text-align: center;
+            transition: background 0.3s;
             cursor: pointer;
+            border: none;
+            font-size: 18px;
+        }
+
+        .btn:hover {
+            background-color: #1a252f;
+        }
+
+        .btn-full {
+            width: 100%;
+            box-sizing: border-box;
             margin-bottom: 20px;
         }
+
+        .btn-detail {
+            background-color: #27ae60; /* 초록색 */
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 15px;
+        }
         
-        .print-btn:hover {
-            background-color: #1a252f;
+        .btn-detail:hover {
+            background-color: #219150;
         }
 
         /* 모바일 최적화 */
@@ -160,7 +178,7 @@
 </head>
 <body>
 
-    <button class="print-btn" onclick="window.print()">🖨️ 보고서 인쇄하기 / PDF 저장</button>
+    <button class="btn btn-full" onclick="window.print()">🖨️ 이 보고서 인쇄하기 / PDF 저장</button>
 
     <div class="container">
         <h1>특급 희귀 자연산 적하수오<br><small style="font-size:0.6em; color:#666;">기록 등재 및 가격 극대화 전략 보고서</small></h1>
@@ -209,6 +227,9 @@
             <span class="step-number">비용 및 시간</span>
             약 50~80만원 소요 / 약 6~8주 걸림
         </div>
+
+        <!-- 상세 페이지로 이동하는 버튼 추가 -->
+        <a href="kri_analysis.html" class="btn btn-detail">📑 한국기록원 등재 가능성 심층 분석 보기</a>
 
         <h2>2. 기네스 월드레코드 도전 (국제)</h2>
         <p>전 세계 기록인 기네스북은 심사가 까다롭지만, 성공 시 가치가 폭등합니다. 현재 <strong>'적하수오(Fallopia multiflora)' 카테고리</strong>에 등록된 기록이 없어 새로운 1등이 될 기회입니다.</p>
